@@ -33,7 +33,7 @@ struct WerwolfSeherinRoleUI: View {
                 .ignoresSafeArea(.all)
                 .padding(.top, 10)
             
-            PlayerGrid(players: engine.getPlayers())
+            PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .Seherin)
                 .setColors(colors: (Color(hex: "#951DF6").opacity(1 / 3), Color(hex: "#951DF6"), Color(hex: "#C93FFF")))
                 .setBounds(bounds: CGRect(x: 0, y: 0, width: screen.width * 0.9, height: screen.height * 0.6))
                 .onClick { selected in

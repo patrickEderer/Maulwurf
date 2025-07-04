@@ -32,6 +32,7 @@ struct WerwolfRoleUIManager: View {
         case .Werwolf: AnyView(WerwolfWerwolfRoleUI(engine: engine))
         case .Hexe: AnyView(WerwolfWitchRoleUI(engine: engine))
         case .Seherin: AnyView(WerwolfSeherinRoleUI(engine: engine))
+        case .Armor: AnyView(WerwolfArmorRoleUI(engine: engine))
         default: AnyView(WerwolfWerwolfRoleUI(engine: engine))
         }
     }

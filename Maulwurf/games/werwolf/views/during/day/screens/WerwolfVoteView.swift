@@ -56,7 +56,7 @@ struct WerwolfVoteView: View {
                         RoundedRectangle(cornerRadius: 10)
                     )
                 
-                PlayerGrid(players: engine.getPlayers())
+                PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .None)
                     .setBounds(bounds: CGRect(x: 0, y: 0, width: screen.width * 0.9, height: screen.height / 2))
                     .setColors(colors: (Color(hex: "#795B39"), Color(hex: "#795B38"), Color(hex: "#503E27")))
                     .onClick { v in

@@ -24,7 +24,7 @@ struct WerwolfWerwolfRoleUI: View {
                 .ignoresSafeArea(.all)
                 .padding(.top, 10)
             
-            PlayerGrid(players: engine.getPlayers())
+            PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .Werwolf)
                 .setColors(colors: (Color(hex: "#EA4D3D").opacity(1 / 3), Color(hex: "#EA4D3D"), Color(hex: "#FF0000")))
                 .setBounds(bounds: CGRect(x: 0, y: 0, width: screen.width * 0.9, height: screen.height * 0.6))
                 .onClick { selected in

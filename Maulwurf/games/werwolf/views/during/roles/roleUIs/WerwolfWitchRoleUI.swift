@@ -18,6 +18,18 @@ struct WerwolfWitchRoleUI: View {
     
     @State var viewIndex: Int = 0
     
+    init(engine: WerwolfEngine) {
+        self.engine = engine
+        
+        if !engine.witchPotions.0 {
+            if !engine.witchPotions.1 {
+                engine.roleUIScreenState = .Sleeping
+            } else {
+                viewIndex = 1
+            }
+        }
+    }
+    
     var body: some View {
         VStack {
             switch viewIndex {
@@ -81,6 +93,7 @@ struct WerwolfWitchRoleUI: View {
                                         isDone = true
                                     } else if (v.translation.width < 0 && v.velocity.width < -50) || slideOffset < -screen.width / 3 {
                                         slideOffset = screen.width * -1
+                                        engine.roleActions!.witchHealAction(heal: false)
                                         isDone = true
                                     } else {
                                         slideOffset = 0
@@ -90,7 +103,11 @@ struct WerwolfWitchRoleUI: View {
                                         Thread {
                                             Thread.sleep(forTimeInterval: 0.25)
                                             
-                                            viewIndex = 1
+                                            if !engine.witchPotions.1 {
+                                                engine.roleUIScreenState = .Sleeping
+                                            } else {
+                                                viewIndex = 1
+                                            }
                                         }.start()
                                     }
                                 }
@@ -163,8 +180,8 @@ struct WerwolfWitchRoleUI: View {
             
             Spacer()
             
-            PlayerGrid(players: engine.getPlayers())
-                .setColors(colors: (Color(hex: "#D900F8"), Color(hex: "#D900F8"), Color(hex: "#FFA9FF")))
+            PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .Hexe)
+                .setColors(colors: (Color(hex: "#D900F8").opacity(1 / 3), Color(hex: "#D900F8"), Color(hex: "#FFA9FF")))
                 .setBounds(bounds: CGRect(x: 0, y: 0, width: screen.width * 0.9, height: screen.height * 0.6))
                 .onClick { v in
                     if v.isEmpty {

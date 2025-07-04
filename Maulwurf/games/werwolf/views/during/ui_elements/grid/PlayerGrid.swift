@@ -13,6 +13,7 @@ struct PlayerGrid: View {
     var bounds: CGRect
     var onClick: ([Int]) -> Void
     var selectionStyle: SelectionStyle = .Single
+    var awakePlayersRole: WerwolfRole
     
     //Fill (selected), Stroke, Stroke (selected)
     var colors: (Color, Color, Color)
@@ -23,12 +24,16 @@ struct PlayerGrid: View {
         players: [WerwolfPlayer],
         bounds: CGRect = UIScreen.main.bounds,
         onClick: @escaping ([Int]) -> Void = { _ in },
-        colors: (Color, Color, Color) = (Color(hex: "#EA4D3D").opacity(1 / 3), Color(hex: "#EA4D3D"), Color(hex: "#FF0000"))
+        colors: (Color, Color, Color) = (Color(hex: "#EA4D3D").opacity(1 / 3), Color(hex: "#EA4D3D"), Color(hex: "#FF0000")),
+        selectionStyle: SelectionStyle = .Single,
+        awakePlayersRole: WerwolfRole
     ) {
         self.players = players
         self.bounds = bounds
         self.onClick = onClick
         self.colors = colors
+        self.selectionStyle = selectionStyle
+        self.awakePlayersRole = awakePlayersRole
     }
     
     var body: some View {
@@ -52,6 +57,7 @@ struct PlayerGrid: View {
                                         let player = players[i]
                                         
                                         PlayerIcon(player: player, size: bounds.width * 0.3)
+                                            .colorMultiply(Color(hex: player.role == awakePlayersRole ? "#AAAAAA" : "#FFFFFF"))
                                         
                                         VStack {
                                             Text("\(players[i].getName())")
@@ -61,19 +67,23 @@ struct PlayerGrid: View {
                                             Spacer()
                                         }
                                     }
+                                    VStack {
+                                        if players[i].isAlive && players[i].role == awakePlayersRole {
+                                            Image(systemName: "eye.fill")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .scaleEffect(0.5)
+                                                .shadow(color: .black, radius: 3, x: 1, y: 1)
+                                        }
+                                    }
                                     HStack {
                                         Spacer()
                                         VStack {
                                             Spacer()
-                                            ZStack {
-                                                if !players[i].isAlive {
-                                                    Image(systemName: "bolt.fill")
-                                                }
-                                                if players[i].isAwake {
-                                                    Image(systemName: "eye.fill")
-                                                }
-                                            }.padding(5)
-                                        }
+                                            if !players[i].isAlive {
+                                                Image(systemName: "bolt.fill")
+                                            }
+                                        }.padding(5)
                                     }
                                 }.allowsHitTesting(false)
                             }
@@ -89,7 +99,7 @@ struct PlayerGrid: View {
             return .gray.opacity(0.1)
         }
         
-        if players[i].isAwake {
+        if players[i].role == awakePlayersRole {
             return .clear
         }
         
@@ -101,7 +111,7 @@ struct PlayerGrid: View {
             return colors.1.darker(by: 0.75)
         }
         
-        if players[i].isAwake {
+        if players[i].role == awakePlayersRole {
             return colors.1.darker(by: 0.5)
         }
         
@@ -113,7 +123,7 @@ struct PlayerGrid: View {
             return
         }
         
-        if players[i].isAwake {
+        if players[i].role == awakePlayersRole {
             return
         }
         
@@ -144,7 +154,7 @@ struct PlayerGrid: View {
     }
     
     private func copy() -> PlayerGrid {
-        return PlayerGrid(players: players, bounds: bounds, onClick: onClick, colors: colors)
+        return PlayerGrid(players: players, bounds: bounds, onClick: onClick, colors: colors, selectionStyle: selectionStyle, awakePlayersRole: awakePlayersRole)
     }
     
     public func setBounds(bounds: CGRect) -> PlayerGrid {
@@ -162,6 +172,12 @@ struct PlayerGrid: View {
     public func setColors(colors: (Color, Color, Color)) -> PlayerGrid {
         var copy = copy()
         copy.colors = colors
+        return copy
+    }
+    
+    public func setSelectionStyle(_ style: SelectionStyle) -> PlayerGrid {
+        var copy = copy()
+        copy.selectionStyle = style
         return copy
     }
 }

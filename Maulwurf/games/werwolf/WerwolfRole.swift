@@ -12,7 +12,7 @@ public enum WerwolfRole: CaseIterable {
     case Dorfbewohner
     case Hexe
     case Seherin
-//    case Armor
+    case Armor
 //    case Jäger
     case None
     

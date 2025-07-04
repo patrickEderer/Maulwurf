@@ -31,7 +31,7 @@ struct WerwolfNewDayView: View {
                     .fill(Color(hex: "#8C6A41"))
                     .frame(width: 200, height: 3)
                 
-                Text("Tote: \(engine.roleActions!.getKillMarkedPlayers().map { engine.getPlayers()[$0].getName() })")
+                Text("Tote: \(engine.roleActions!.getKillMarkedPlayers().map { engine.getPlayers()[$0].getName() }.joined(separator: ", "))")
             }
             
             VStack {

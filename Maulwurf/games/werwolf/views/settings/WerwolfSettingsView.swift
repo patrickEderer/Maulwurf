@@ -69,35 +69,6 @@ struct WerwolfSettingsView: View {
                     .fill(MaulwurfApp.color.darker(by: -0.5))
             )
             
-//            MainDropDown(title: "Players", value: "\(engine.getPlayers().count)", id: 0) {
-//                VStack {
-//                    Slider(value: Binding(get: {
-//                        Double(engine.getPlayers().count - 3) / 17
-//                    }, set: { new in
-//                        let newCount = Int(new * 17) + 4
-//                        
-//                        engine.setPlayerCount(newCount)
-//                    }))
-//                    .accentColor(MaulwurfApp.color)
-//                }
-//                
-//                List {
-//                    ForEach (0..<engine.getPlayers().count, id: \.self) { index in
-//                        TextField("Player \(index + 1)", text: Binding(get: {
-//                            if engine.getRoles().count > index {
-//                                return engine.getPlayers()[index].getName(returnDefaultIfEmpty: false)
-//                            } else {
-//                                return ""
-//                            }
-//                        }, set: { new in
-//                            if engine.getPlayers().count > index {
-//                                engine.setPlayerName(index, new)
-//                            }
-//                        }))
-//                    }
-//                }.frame(height: 200)
-//            }
-            
             let roleCount = engine.getRoles().map { $0.value }.reduce(0, +)
             MainDropDown(title: "Roles", value: "\(roleCount)", id: 1) {
                 List {
@@ -128,7 +99,7 @@ struct WerwolfSettingsView: View {
         .Dorfbewohner,
         .Hexe,
         .Seherin,
-//        .Armor,
+        .Armor,
 //        .Jäger
     ]
     let maxRoleCount: [WerwolfRole: Int] = [
@@ -136,7 +107,7 @@ struct WerwolfSettingsView: View {
         .Dorfbewohner: 10,
         .Hexe: 1,
         .Seherin: 1,
-//        .Armor: 1,
+        .Armor: 1,
 //        .Jäger: 1
     ]
 }

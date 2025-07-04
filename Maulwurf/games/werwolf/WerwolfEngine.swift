@@ -24,6 +24,7 @@ public class WerwolfEngine: ObservableObject {
     
     @Published var result: WerwolfEndCondition?
     
+    var witchPotions: (Bool, Bool) = (true, true)
     var roleActions: WerwolfRoleActions?
     
     init() {
@@ -49,26 +50,13 @@ public class WerwolfEngine: ObservableObject {
         gameState = .Running
         
         Thread {
+            self.checkAndShowRoleUI(role: .Armor)
             while self.gameState == .Running {
                 if self.checkWinCondition() {
                     return
                 }
                 
-                
-                self.showRoleUI(for: .Werwolf)
-                while self.showingRoleUI != nil {
-                    Thread.sleep(forTimeInterval: 0.2)
-                }
-                
-                self.showRoleUI(for: .Hexe)
-                while self.showingRoleUI != nil {
-                    Thread.sleep(forTimeInterval: 0.2)
-                }
-                
-                self.showRoleUI(for: .Seherin)
-                while self.showingRoleUI != nil {
-                    Thread.sleep(forTimeInterval: 0.2)
-                }
+                self.showRoleUIs()
                 
                 DispatchQueue.main.sync {
                     self.dayNight = .Day
@@ -79,6 +67,29 @@ public class WerwolfEngine: ObservableObject {
                 }
             }
         }.start()
+    }
+    
+    private func showRoleUIs() {
+        checkAndShowRoleUI(role: .Werwolf)
+        
+        checkAndShowRoleUI(role: .Hexe)
+        
+        checkAndShowRoleUI(role: .Seherin)
+    }
+    
+    private func checkAndShowRoleUI(role: WerwolfRole) {
+        if !players.reduce(true, { r, p in
+            r && p.role != role
+        }) {
+            showRoleUIAndWaitUntilDone(role: role)
+        }
+    }
+    
+    private func showRoleUIAndWaitUntilDone(role: WerwolfRole) {
+        self.showRoleUI(for: role)
+        while self.showingRoleUI != nil {
+            Thread.sleep(forTimeInterval: 0.2)
+        }
     }
     
     private func showRoleUI(for role: WerwolfRole) {

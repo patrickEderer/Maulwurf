@@ -33,19 +33,22 @@ class WerwolfRoleActions {
     }
     
     public func witchHealAction(heal: Bool) {
-        print("witch heal \(heal)")
-        
         if heal {
+            engine.witchPotions.0 = false
             killMarkedPlayerIndexes.removeFirst()
         }
     }
     
     public func witchKillAction(kill: Bool, player: Int?) {
-        print("Withc kill \(kill) \(player ?? -1)")
         if kill {
+            engine.witchPotions.1 = false
             killMarkedPlayerIndexes.append(player!)
         }
         
         engine.roleUIScreenState = .Sleeping
+    }
+    
+    public func armorAction() {
+        
     }
 }

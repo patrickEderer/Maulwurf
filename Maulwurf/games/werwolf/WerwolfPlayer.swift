@@ -14,7 +14,6 @@ public class WerwolfPlayer {
     var index: Int
     
     var isAlive: Bool = true
-    var isAwake: Bool = false
     
     // Skin color, hair, hair color, eyes, mouth
     var imageAssets: (Color, Int, Color, Int, Int)
