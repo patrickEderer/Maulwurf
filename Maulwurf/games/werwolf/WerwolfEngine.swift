@@ -6,8 +6,22 @@
 //
 
 import Foundation
+import SwiftUI
 
 public class WerwolfEngine: ObservableObject {
+    private static var INSTANCE: WerwolfEngine? = WerwolfEngine()
+    
+    private init() {
+        readFileOrSetDefault()
+    }
+    
+    public static func getInstance() -> WerwolfEngine {
+        if (INSTANCE == nil) {
+            INSTANCE = WerwolfEngine()
+        }
+        return INSTANCE!
+    }
+    
     var saveQueue = SaveQueue.getInstance()
     var fileSaver = FileSaver.getInstance()
     var sensoryFeedback = SensoryFeedback.getInstance()
@@ -18,7 +32,7 @@ public class WerwolfEngine: ObservableObject {
     @Published var gameState: WerwolfGameState = .Uninitialized
     
     @Published var showingRoleUI: WerwolfRole? = nil
-    @Published var dayNight: WerwolfDayNight = .Night
+    @Published private var dayNight: WerwolfDayNight = .Night
     
     @Published var roleUIScreenState: WerwolfRoleUIScreenState = .Locked
     
@@ -27,15 +41,8 @@ public class WerwolfEngine: ObservableObject {
     var witchPotions: (Bool, Bool) = (true, true)
     var roleActions: WerwolfRoleActions?
     
-    init() {
-        readFileOrSetDefault()
-        
-//        start()
-//        startGame()
-    }
-    
     func start() {
-        roleActions = WerwolfRoleActions(engine: self)
+        roleActions = WerwolfRoleActions.getInstance(engine: self)
         
         if !checkStartConditions() {
             return
@@ -59,10 +66,10 @@ public class WerwolfEngine: ObservableObject {
                 self.showRoleUIs()
                 
                 DispatchQueue.main.sync {
-                    self.dayNight = .Day
+                    self.setDayNight(.Day)
                 }
                 
-                while self.dayNight == .Day {
+                while self.dayNight == .Day && self.gameState == .Running {
                     Thread.sleep(forTimeInterval: 0.2)
                 }
             }
@@ -79,7 +86,7 @@ public class WerwolfEngine: ObservableObject {
     
     private func checkAndShowRoleUI(role: WerwolfRole) {
         if !players.reduce(true, { r, p in
-            r && p.role != role
+            r && (!p.isAlive || p.role != role)
         }) {
             showRoleUIAndWaitUntilDone(role: role)
         }
@@ -105,20 +112,43 @@ public class WerwolfEngine: ObservableObject {
         }.start()
     }
     
-    private func checkWinCondition() -> Bool {
+    public func setDayNight(_ v: WerwolfDayNight) {
+        withAnimation(.easeInOut(duration: 10)) {
+            self.dayNight = v
+        }
+    }
+    
+    public func getDayNight() -> WerwolfDayNight {
+        return dayNight
+    }
+    
+    public func checkWinCondition() -> Bool {
         let werwolfes = players.reduce(into: 0) { result, player in
-            if player.role == .Werwolf {
+            if player.isAlive && player.role == .Werwolf {
                 result += 1
             }
         }
-        let nonWerwolfes = players.count - werwolfes
-        
-        if werwolfes >= nonWerwolfes {
-            DispatchQueue.main.sync {
-                stop(reason: .WerwolfsWon)
+        let nonWerwolfes = players.reduce(into: 0) { result, player in
+            if player.isAlive && player.role != .Werwolf {
+                result += 1
             }
+        }
+        
+        if werwolfes == 0 && nonWerwolfes == 0 {
+            stop(reason: .NoPlayersRemaining)
             return true
         }
+        
+        if werwolfes >= nonWerwolfes {
+            stop(reason: .WerwolfsWon)
+            return true
+        }
+        
+        if werwolfes == 0 {
+            self.stop(reason: .VillagersWon)
+            return true
+        }
+        
         return false
     }
     

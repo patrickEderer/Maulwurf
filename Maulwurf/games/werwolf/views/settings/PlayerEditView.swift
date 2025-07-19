@@ -53,6 +53,8 @@ struct PlayerEditView: View {
                     player.imageAssets.0 = new
                     
                     engine.savePlayers()
+                    
+                    updater.update()
                 }))
                 .frame(width: screen.width / 2)
                 
@@ -87,8 +89,8 @@ struct PlayerEditView: View {
                 .frame(width: screen.width / 2)
                 
                 Button {
-                    player.imageAssets.1 += 5
-                    player.imageAssets.1 %= 6
+                    player.imageAssets.1 += 6
+                    player.imageAssets.1 %= 7
                     
                     updater.update()
                     
@@ -108,7 +110,7 @@ struct PlayerEditView: View {
                 
                 Button {
                     player.imageAssets.1 += 1
-                    player.imageAssets.1 %= 6
+                    player.imageAssets.1 %= 7
                     
                     updater.update()
                     
@@ -124,7 +126,7 @@ struct PlayerEditView: View {
             
             HStack {
                 HStack {
-                    Text("Mund")
+                    Text("Augen")
                     
                     Spacer()
                 }
@@ -167,7 +169,7 @@ struct PlayerEditView: View {
             
             HStack {
                 HStack {
-                    Text("Augen")
+                    Text("Mund")
                     
                     Spacer()
                 }
@@ -207,6 +209,14 @@ struct PlayerEditView: View {
                 
                 Spacer()
             }
+            VStack {
+                PlayerIcon(player: player, size: screen.width / 3)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(Color(hex: "#0096FF").opacity(0.5))
+                    .stroke(Color(hex: "#0096FF"))
+            )
         }
     }
 }

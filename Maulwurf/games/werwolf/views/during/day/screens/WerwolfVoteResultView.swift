@@ -17,7 +17,6 @@ struct WerwolfVoteResultView: View {
         ZStack {
             VStack {
                 let mostVotedPlayerIndex = mostVotedPlayerIndex()
-                let mostVotedPlayer = engine.getPlayers()[mostVotedPlayerIndex]
                 
                 Spacer()
                 
@@ -29,13 +28,16 @@ struct WerwolfVoteResultView: View {
                             RoundedRectangle(cornerRadius: 10)
                         )
                     
-                    VStack {
-                        Text("\(mostVotedPlayer.getName())")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        
-                        Text("\(mostVotedPlayer.role)")
-                            .font(.title)
+                    if mostVotedPlayerIndex != -1 {
+                        let mostVotedPlayer = engine.getPlayers()[mostVotedPlayerIndex]
+                        VStack {
+                            Text("\(mostVotedPlayer.getName())")
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Text("\(mostVotedPlayer.role)")
+                                .font(.title)
+                        }
                     }
                 }
                 
@@ -49,7 +51,7 @@ struct WerwolfVoteResultView: View {
                 .ignoresSafeArea(.all)
         }.onTapGesture {
             manager.viewIndex = 0
-            engine.dayNight = .Night
+            engine.setDayNight(.Night)
         }
     }
     
@@ -63,10 +65,14 @@ struct WerwolfVoteResultView: View {
             if entry.value > max {
                 max = entry.value
                 maxIndex = entry.key
+            } else if entry.value == max {
+                maxIndex = -1
             }
         }
         
-        engine.getPlayers()[maxIndex].isAlive = false
+        if maxIndex != -1 {
+            engine.getPlayers()[maxIndex].isAlive = false
+        }
         
         return maxIndex
     }

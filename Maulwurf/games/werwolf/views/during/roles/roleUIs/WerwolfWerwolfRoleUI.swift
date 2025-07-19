@@ -17,6 +17,7 @@ struct WerwolfWerwolfRoleUI: View {
     var body: some View {
         VStack {
             Text("Wählt ein\nOpfer")
+                .minimumScaleFactor(0.1)
                 .foregroundColor(Color(hex: "#FF0000"))
                 .font(.system(size: 75))
                 .multilineTextAlignment(.center)

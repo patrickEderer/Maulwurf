@@ -14,7 +14,7 @@ struct WerwolfPlayerSettings: View {
     var screen = UIScreen.main.bounds
     
     @State var editingPlayerIndex: Int? = nil
-    @State var slideOffset: (Int, Double) = (-1, 0)
+    @State var slideOffset: (Int, Double, Double) = (-1, 0, 0)
     
     var body: some View {
         VStack {
@@ -129,24 +129,26 @@ struct WerwolfPlayerSettings: View {
                         .onChanged { value in
                             if abs(value.translation.height) > abs(value.translation.width) { return }
                             
-                            if value.translation.width < 0 {
+                            if value.translation.width + slideOffset.2 < 0 {
                                 withAnimation(.easeOut(duration: 0.25)) {
                                     slideOffset.0 = player.index
-                                    slideOffset.1 = max(value.translation.width, -99)
+                                    slideOffset.1 = max(value.translation.width + slideOffset.2, -99)
                                 }
                             }
                         }
                         .onEnded { value in
                             if abs(value.translation.height) > abs(value.translation.width) { return }
                             
-                            if value.translation.width > -99 && value.velocity.width > -100 {
+                            if value.translation.width + slideOffset.2 > -99 && value.velocity.width + slideOffset.2 > -100 {
                                 withAnimation(.easeOut(duration: 0.25)) {
                                     slideOffset.0 = -1
                                     slideOffset.1 = 0
+                                    slideOffset.2 = 0
                                 }
                             } else {
                                 withAnimation(.easeOut(duration: 0.25)) {
                                     slideOffset.1 = -100
+                                    slideOffset.2 = -100
                                 }
                             }
                         }

@@ -11,4 +11,5 @@ public enum Game {
     case NONE
     case IMPOSTOR
     case WERWOLF
+    case UNO
 }

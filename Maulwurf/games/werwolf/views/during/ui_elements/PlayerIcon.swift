@@ -9,9 +9,10 @@ import Foundation
 import SwiftUI
 
 struct PlayerIcon: View {
+    @ObservedObject var updater = Updater.getInstance()
     var player: WerwolfPlayer
     var size: Double
-    
+    var showDead: Bool = false
     
     var body: some View {
         // Skin color, hair, hair color, eyes, mouth
@@ -31,7 +32,7 @@ struct PlayerIcon: View {
                 .colorMultiply(player.imageAssets.2)
             
             //Eyes
-            Image("eyes.\(player.imageAssets.3)")
+            Image(showDead ? "eyes.dead" : "eyes.\(player.imageAssets.3)")
                 .resizable()
                 .interpolation(.none)
                 .frame(width: size, height: size)
@@ -42,7 +43,7 @@ struct PlayerIcon: View {
                 .resizable()
                 .interpolation(.none)
                 .frame(width: size, height: size)
-                .offset(x: 0, y: size * 0.15)
+                .offset(x: 0, y: size * 0.05)
         }.clipShape(Rectangle())
     }
 }

@@ -8,13 +8,23 @@
 import Foundation
 
 class WerwolfRoleActions {
+    private static var INSTANCE: WerwolfRoleActions?
+    
+    private init(engine: WerwolfEngine) {
+        self.engine = engine
+    }
+    
+    public static func getInstance(engine: WerwolfEngine) -> WerwolfRoleActions {
+        if (INSTANCE == nil) {
+            INSTANCE = WerwolfRoleActions(engine: engine)
+        }
+        return INSTANCE!
+    }
+    
     var engine: WerwolfEngine
     
     private var killMarkedPlayerIndexes: [Int] = []
-    
-    init(engine: WerwolfEngine) {
-        self.engine = engine
-    }
+    private var healedPlayer: Int?
     
     public func werwolfAction(killedPlayerIndex: Int) {
         print("Werwolf \(killedPlayerIndex)")
@@ -35,7 +45,10 @@ class WerwolfRoleActions {
     public func witchHealAction(heal: Bool) {
         if heal {
             engine.witchPotions.0 = false
+            healedPlayer = killMarkedPlayerIndexes.first
             killMarkedPlayerIndexes.removeFirst()
+        } else {
+            healedPlayer = nil
         }
     }
     
@@ -48,7 +61,14 @@ class WerwolfRoleActions {
         engine.roleUIScreenState = .Sleeping
     }
     
-    public func armorAction() {
+    public func armorAction(playerIs: [Int]) {
+        let players = engine.getPlayers()
         
+        players[playerIs[0]].inLoveWith = playerIs[1]
+        players[playerIs[1]].inLoveWith = playerIs[0]
+    }
+    
+    public func getHealedPlayer() -> Int? {
+        return healedPlayer
     }
 }

@@ -21,11 +21,9 @@ struct WerwolfVoteView: View {
         self.engine = engine
         self.manager = manager
         
-        print("INIT")
-        
         repeat {
             currentPlayerIndex += 1
-        } while !engine.getPlayers()[currentPlayerIndex].isAlive
+        } while !engine.getPlayers()[currentPlayerIndex].isAlive || currentPlayerIndex >= engine.getPlayers().count
     }
     
     var body: some View {

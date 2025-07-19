@@ -10,4 +10,5 @@ import Foundation
 public enum WerwolfEndCondition {
     case NoPlayersRemaining
     case WerwolfsWon
+    case VillagersWon
 }

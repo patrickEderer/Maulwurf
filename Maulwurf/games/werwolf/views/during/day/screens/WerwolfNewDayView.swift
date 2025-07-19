@@ -49,6 +49,10 @@ struct WerwolfNewDayView: View {
         }.onTapGesture {
             manager.killAllMarkedPlayers()
             manager.viewIndex = 1
+            
+            if engine.checkWinCondition() {
+                engine.gameState = .Finished
+            }
         }
     }
 }

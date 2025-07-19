@@ -26,6 +26,7 @@ struct WerwolfSeherinRoleUI: View {
     var selectionView: some View {
         VStack {
             Text("Wen möchtest\ndu Sehen?")
+                .minimumScaleFactor(0.1)
                 .foregroundColor(Color(hex: "#951DF6"))
                 .font(.system(size: 50))
                 .multilineTextAlignment(.center)

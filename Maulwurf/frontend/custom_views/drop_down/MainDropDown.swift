@@ -27,6 +27,7 @@ struct MainDropDown <Content: View>: View {
     
     var body: some View {
         ZStack {
+            let isOpen = manager.getOpenDropDownId() == id
             VStack {
                 HStack {
                     Image(systemName: "greaterthan")
@@ -39,16 +40,19 @@ struct MainDropDown <Content: View>: View {
                     
                     Text("\(value)")
                 }
-                if manager.getOpenDropDownId() == id {
-                    Spacer()
-                        .frame(height: 10)
+                VStack {
                     content()
-                        .transition(.blurReplace)
                 }
+                .padding(10)
+                .transition(.blurReplace)
+                .frame(maxHeight: isOpen ? nil : 0)
+                .padding(.top, isOpen ? 0 : -100)
+                .mask(RoundedRectangle(cornerRadius: 10).frame(maxHeight: isOpen ? nil : 0))
+                .opacity(isOpen ? 1 : 0)
             }
             .animation(.easeInOut(duration: 0.5), value: manager.getOpenDropDownId() == id)
             .frame(width: UIScreen.main.bounds.width * 0.75)
-            .padding(10)
+            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
             .overlay(content: {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.clear)

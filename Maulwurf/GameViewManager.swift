@@ -13,7 +13,8 @@ struct GameViewManager: View {
         switch runningGame {
         case .NONE: GameSelectionView(runningGame: $runningGame)
         case .IMPOSTOR: ImpostorView(engine: ImpostorFactory.getInstance())
-        case .WERWOLF: WerwolfView(engine: WerwolfEngine())
+        case .WERWOLF: WerwolfView(engine: WerwolfEngine.getInstance())
+        case .UNO: UnoView()
         }
     }
 }

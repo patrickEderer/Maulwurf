@@ -13,17 +13,27 @@ struct WerwolfArmorRoleUI: View {
     var screen = UIScreen.main.bounds
     
     @State var selectedPlayers: [Int] = []
+    @State var showLiebespaar = false
     
     var body: some View {
+        if !showLiebespaar {
+            armorUI
+        } else {
+            WerwolfLiebespaarRoleUI(engine: engine)
+        }
+    }
+    
+    var armorUI: some View {
         VStack {
             Text("Wen möchtest\ndu Verlieben?")
+                .minimumScaleFactor(0.1)
                 .foregroundColor(Color(hex: "#FF1C57"))
                 .font(.system(size: 75))
                 .multilineTextAlignment(.center)
                 .fontWeight(.semibold)
                 .ignoresSafeArea(.all)
                 .padding(.top, 10)
-                .minimumScaleFactor(0.5)
+                .scaleEffect(0.9)
             
             PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .None)
                 .setSelectionStyle(.Pair)
@@ -37,25 +47,31 @@ struct WerwolfArmorRoleUI: View {
             
             let fillPercentage = getButtonFillPercentage()
             Button {
-                engine.roleActions!.armorAction()
+                engine.roleActions!.armorAction(playerIs: selectedPlayers)
+                showLiebespaar = true
             } label: {
-                Text(getButtonText())
-                    .font(.system(size: 20).bold())
-                    .foregroundColor(Color(hex: "#FFB7E4"))
-                    .frame(width: 200, height: 60)
+                HStack {
+                    Text(getButtonText())
+                        .font(.system(size: 20).bold())
+                        .foregroundColor(Color(hex: "#FFB7E4"))
+                    
+                    Text("🏹")
+                        .font(.system(size: 20).bold())
+                        .foregroundColor(Color(hex: "#FFB7E4"))
+                }.frame(width: 200, height: 60)
             }.background(
                 ZStack {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 20)
                         .fill(Color(hex: "#5E5E5E"))
                     
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(hex: fillPercentage == 1 ? "#FF1C57" : "#961134"))
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color(hex: fillPercentage == 1 ? "#FF1C57" : (fillPercentage == 0 ? "#5E5E5E" : "#961134")))
                         .mask(
-//                        LinearGradient(stops: [.init(color: Color(hex: fillPercentage == 1 ? "#FF1C57" : "#961134"), location: fillPercentage - 0.01), .init(color: Color(hex: "#5E5E5E"), location: fillPercentage)], startPoint: .leading, endPoint: .trailing)
                             ZStack {
-                                RoundedRectangle(cornerRadius: 10)
+                                RoundedRectangle(cornerRadius: 20)
                                     .frame(width: 200)
                                     .offset(x: (fillPercentage - 1) * 200)
+                                    .shadow(color: .black, radius: 5)
                             }
                         )
                 }
@@ -68,6 +84,6 @@ struct WerwolfArmorRoleUI: View {
     }
     
     private func getButtonText() -> String {
-        return selectedPlayers.count == 2 ? "Verlieben 🏹" : "\(selectedPlayers.count)/2🏹"
+        return selectedPlayers.count == 2 ? "Verlieben" : "\(selectedPlayers.count)/2"
     }
 }

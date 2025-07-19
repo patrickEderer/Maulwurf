@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WerwolfDayNight {
+public enum WerwolfDayNight {
     case Day
     case Night
 }

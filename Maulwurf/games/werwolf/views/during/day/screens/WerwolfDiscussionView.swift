@@ -39,6 +39,7 @@ struct WerwolfDiscussionView: View {
             
             Button {
                 manager.viewIndex = 2
+                
             } label: {
                 Text("Skip")
                     .font(.system(size: 20))

@@ -12,6 +12,7 @@ public class WerwolfPlayer {
     private var name: String
     var role: WerwolfRole
     var index: Int
+    var inLoveWith: Int? = nil
     
     var isAlive: Bool = true
     
@@ -49,22 +50,28 @@ public class WerwolfPlayer {
         self.imageAssets = imageAssets
     }
     
+    public func reset() {
+        role = .None
+        inLoveWith = nil
+        isAlive = true
+    }
+    
     public func setRandomAssets() {
         imageAssets = (
             // Skin color
             Color(hex: "#F6CEA9"),
             
             // Hair
-            Int.random(in: 0..<6),
+            Int.random(in: 0...6),
             
             // Hair color
             Color.brown,
             
             // Eyes
-            Int.random(in: 0..<9),
+            Int.random(in: 0...8),
             
             // Mouth
-            Int.random(in: 0..<12)
+            Int.random(in: 0...11)
         )
     }
     
@@ -90,11 +97,8 @@ public class WerwolfPlayer {
     }
     
     public static func fromString(_ string: String, index: Int) -> WerwolfPlayer {
-        print(string)
         let splitStr = string.split(separator: ":")
         let imageAssetsSplit = splitStr[1].split(separator: "&")
-        
-        print("\(splitStr)\n\(imageAssetsSplit)")
         
         var name = String(splitStr[0])
         

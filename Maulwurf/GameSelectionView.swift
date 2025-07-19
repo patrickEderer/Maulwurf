@@ -28,5 +28,14 @@ struct GameSelectionView: View {
         
         Spacer()
             .frame(height: 50)
+        
+        Button {
+            runningGame = .UNO
+        } label: {
+            Text("Game numero UNO")
+        }
+        
+        Spacer()
+            .frame(height: 50)
     }
 }

@@ -21,11 +21,15 @@ struct WerwolfWitchRoleUI: View {
     init(engine: WerwolfEngine) {
         self.engine = engine
         
-        if !engine.witchPotions.0 {
-            if !engine.witchPotions.1 {
-                engine.roleUIScreenState = .Sleeping
-            } else {
+        print(engine.witchPotions)
+        
+        if engine.witchPotions.0 {
+            viewIndex = 0
+        } else {
+            if engine.witchPotions.1 {
                 viewIndex = 1
+            } else {
+                engine.roleUIScreenState = .Sleeping
             }
         }
     }
@@ -47,6 +51,7 @@ struct WerwolfWitchRoleUI: View {
             ZStack {
                 VStack {
                     Text("Opfer Heilen?")
+                        .minimumScaleFactor(0.1)
                         .foregroundColor(Color(hex: "#D900F8"))
                         .font(.system(size: 75))
                         .multilineTextAlignment(.center)
@@ -171,6 +176,7 @@ struct WerwolfWitchRoleUI: View {
     var killView: some View {
         VStack {
             Text("Jemanden Töten?")
+                .minimumScaleFactor(0.1)
                 .foregroundColor(Color(hex: "#D900F8"))
                 .font(.system(size: 75))
                 .multilineTextAlignment(.center)
@@ -178,9 +184,9 @@ struct WerwolfWitchRoleUI: View {
                 .ignoresSafeArea(.all)
                 .padding(.top, 20)
             
-            Spacer()
+            Spacer(minLength: 20)
             
-            PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .Hexe)
+            PlayerGrid(players: engine.getPlayers(), awakePlayersRole: .Hexe, disabledPlayers: [engine.roleActions!.getHealedPlayer() ?? -1], deathMarkedPlayers: engine.roleActions!.getKillMarkedPlayers())
                 .setColors(colors: (Color(hex: "#D900F8").opacity(1 / 3), Color(hex: "#D900F8"), Color(hex: "#FFA9FF")))
                 .setBounds(bounds: CGRect(x: 0, y: 0, width: screen.width * 0.9, height: screen.height * 0.6))
                 .onClick { v in

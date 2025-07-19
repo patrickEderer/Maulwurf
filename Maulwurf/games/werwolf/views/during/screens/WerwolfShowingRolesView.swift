@@ -22,18 +22,24 @@ struct WerwolfShowingRolesView: View {
         
         let player = engine.getPlayers()[showingPlayerIndex]
         ZStack {
+            let roleColor = player.role.getColor()
+            let roleForegroundColor = player.role.getForegroundColor()
             VStack {
                 Spacer()
                     .frame(height: screen.height / 4)
                 
                 Text("\(player.role)")
                     .font(.title)
+                    .foregroundColor(roleForegroundColor)
+                    .bold()
                     .padding(20)
             }
             .frame(width: screen.width * 0.75, height: screen.height * 0.5)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(hex: "#555555"))
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(roleColor.opacity(max(min((-slideOffset / (screen.height / 5.0) - 0.5) * 4, 1), 0)))
+                    .stroke(Color(hex: "#292929"), lineWidth: 5)
+                    .background(Color(hex: "#555555").cornerRadius(30))
             )
             
             VStack {
@@ -53,7 +59,7 @@ struct WerwolfShowingRolesView: View {
             }
             .frame(width: screen.width * 0.75, height: screen.height * 0.5)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 30)
                     .fill(Color(hex: "#555555"))
                     .offset(y: slideOffset)
             ).simultaneousGesture(

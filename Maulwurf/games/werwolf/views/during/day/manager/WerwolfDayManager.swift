@@ -30,6 +30,9 @@ struct WerwolfDayManager: View {
         for i in killMarkedPlayers {
             let player = engine.getPlayers()[i]
             player.isAlive = false
+            if player.inLoveWith != nil {
+                engine.getPlayers()[player.inLoveWith!].isAlive = false
+            }
         }
         
         engine.roleActions!.resetMarkedPlayers()

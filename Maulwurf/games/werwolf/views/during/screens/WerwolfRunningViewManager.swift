@@ -24,22 +24,34 @@ struct WerwolfRunningViewManager: View {
                     .frame(height: 50)
                 
                 //Background
-                switch engine.dayNight {
-                case .Day:
-                    Image("werwolf.background.day")
-                        .resizable()
-                        .frame(width: screen.height * (890 / 1630), height: screen.height)
-                        .ignoresSafeArea(.all)
-                case .Night:
-                    Image("werwolf.background.night")
-                        .resizable()
-                        .frame(width: screen.width, height: screen.width * (1644 / 882))
-                }
+                VStack {
+                    VStack {
+                        Image("werwolf.background.night")
+                            .resizable()
+                            .frame(width: screen.width, height: screen.width * (1644 / 882))
+                    }
+                    .frame(width: screen.width, height: screen.height)
+                    
+                    LinearGradient(colors: [Color(hex: "#0D0D0D"), Color(hex: "#00FECD")], startPoint: .top, endPoint: .init(x: 0.5, y: 0.9))
+                        .frame(height: screen.height / 2)
+                    
+                    ZStack {
+                        Color(hex: "#00FECD")
+                            .frame(width: screen.height * (890 / 1630), height: screen.height)
+                        
+                        Image("werwolf.background.day")
+                            .resizable()
+                            .frame(width: screen.height * (890 / 1630), height: screen.height)
+                            .ignoresSafeArea(.all)
+                            .padding(.top, -10)
+                    }
+                }.offset(x: 0, y: screen.height * (engine.getDayNight() == .Day ? -0.7 : 0.7))
                 
                 Spacer()
             }.ignoresSafeArea(.all)
+                .frame(width: screen.width, height: screen.height * 0.75)
             
-            if engine.dayNight == .Day {
+            if engine.getDayNight() == .Day {
                 WerwolfDayManager(engine: engine)
             }
             
