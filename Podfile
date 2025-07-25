@@ -1,32 +1,15 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-
-target 'ImpostorCore' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for ImpostorCore
-
-  target 'ImpostorCoreTests' do
-    # Pods for testing
-  end
-
-end
+platform :ios, '15.0'
 
 target 'Maulwurf' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
+end
 
-  # Pods for Maulwurf
+target 'MaulwurfTests' do
+  inherit! :search_paths
+  # Pods for testing
+end
 
-  pod 'GCDWebServer'
-  target 'MaulwurfTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'MaulwurfUITests' do
-    # Pods for testing
-  end
-
+target 'MaulwurfUITests' do
+  inherit! :search_paths
+  # Pods for testing
 end

@@ -14,7 +14,7 @@ struct GameViewManager: View {
         case .NONE: GameSelectionView(runningGame: $runningGame)
         case .IMPOSTOR: ImpostorView(engine: ImpostorFactory.getInstance())
         case .WERWOLF: WerwolfView(engine: WerwolfEngine.getInstance())
-        case .UNO: UnoView()
+        case .UNO: UnoView(engine: UnoEngine.getInstance())
         }
     }
 }

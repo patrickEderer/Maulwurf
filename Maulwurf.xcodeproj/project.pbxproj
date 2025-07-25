@@ -45,22 +45,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		ED4568A82DEC77F000513CD2 /* Maulwurf */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = Maulwurf;
 			sourceTree = "<group>";
 		};
 		ED4568B62DEC77F100513CD2 /* MaulwurfTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = MaulwurfTests;
 			sourceTree = "<group>";
 		};
 		ED4568C02DEC77F100513CD2 /* MaulwurfUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = MaulwurfUITests;
 			sourceTree = "<group>";
 		};
@@ -91,13 +85,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		12292623E2091239674D3562 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		ED45689D2DEC77F000513CD2 = {
 			isa = PBXGroup;
 			children = (
@@ -105,7 +92,6 @@
 				ED4568B62DEC77F100513CD2 /* MaulwurfTests */,
 				ED4568C02DEC77F100513CD2 /* MaulwurfUITests */,
 				ED4568A72DEC77F000513CD2 /* Products */,
-				12292623E2091239674D3562 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -421,6 +407,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S4RD263H67;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GCDWebServer",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -450,6 +440,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S4RD263H67;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GCDWebServer",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
