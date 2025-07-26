@@ -40,7 +40,7 @@ struct UnoCardSelector: View {
                 let card = cards[i]
                 let offset = getCardOffset(i)
                 
-                UnoCardView(card: card, glowing: UnoEngine.canPlaceCardOn(card, topCard: currentCard!))
+                UnoCardView(card: card, glowing: card.canBePlacedOn(currentCard!))
                     .rotationEffect(.degrees(getRotation(i)), anchor: .bottom)
                     .scaledToFit()
                     .scaleEffect((selectedCardIndex ?? -1 != i) ? 0.5 : (holdingCardPos == nil ? 0.75 : 0.375))
@@ -74,7 +74,7 @@ struct UnoCardSelector: View {
     }
     
     private func getCardOffset(_ i: Int) -> CGSize {
-        var defaultOffset = selectedCardIndex == nil ?
+        let defaultOffset = selectedCardIndex == nil ?
             CGSize(
                 width: (Double(i) - (Double(cards.count - 1) / 2.0))
                     * (getPixelsPerCard() * 0.5),
@@ -91,7 +91,7 @@ struct UnoCardSelector: View {
             return CGSize(width: res.width + defaultOffset.width, height: res.height)
         }
         
-        defaultOffset.width -= (lastDragOffset?.x ?? 0)
+//        defaultOffset.width -= (lastDragOffset?.x ?? 0)
         
         return defaultOffset
     }
@@ -117,7 +117,7 @@ struct UnoCardSelector: View {
         lastDragOffset = value.location
         
         if selectedCardIndex != nil && (value.location.y < 0 || value.velocity.height < -20) {
-            if UnoEngine.canPlaceCardOn(cards[selectedCardIndex!], topCard: currentCard!) {
+            if cards[selectedCardIndex!].canBePlacedOn(currentCard!) {
                 withAnimation(.easeOut(duration: 0.2)) {
                     if startHoldingCardPos == nil {
                         startHoldingCardPos = value.translation
@@ -136,7 +136,7 @@ struct UnoCardSelector: View {
         
         if holdingCardPos != nil { return }
 
-        let offsetFromCenter = value.location.x - (screen.width / 2)
+        let offsetFromCenter = value.location.x - (screen.width / 2) + 20
         let cardCount = cards.count
 
         let cardIndex = Int(
@@ -165,7 +165,7 @@ struct UnoCardSelector: View {
 
     private func dragGuestureEnded(_ value: DragGesture.Value) {
         if value.location.y < 0 {
-            if !UnoEngine.canPlaceCardOn(cards[selectedCardIndex!], topCard: currentCard!) {
+            if !cards[selectedCardIndex!].canBePlacedOn(currentCard!) {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     reset()
                 }

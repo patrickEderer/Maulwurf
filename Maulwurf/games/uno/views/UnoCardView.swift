@@ -14,42 +14,31 @@ struct UnoCardView: View {
     
     var body: some View {
         ZStack {
-            Image("uno.card")
+            Image("uno.card.color")
                 .resizable()
+                .interpolation(.none)
                 .aspectRatio(1190/1729, contentMode: .fit)
                 .colorMultiply(Color(hex: card.color.getHex()))
                 .colorMultiply(glowing == false ? .white.darker(by: 0.5) : .white)
-                .shadow(color: Color(hex: card.color.getHex()).opacity(glowing == true ? 1 : 0), radius: 10)
             
-            Text(card.char)
-                .font(.system(size: 50))
-                .bold()
+            Image("uno.card.border")
+                .resizable()
+                .interpolation(.none)
+                .aspectRatio(1190/1729, contentMode: .fit)
+                .colorMultiply(glowing == false ? .white.darker(by: 0.5) : .white)
             
-            VStack {
-                HStack {
-                    Text(card.char)
-                        .font(.system(size: 20))
-                        .bold()
-                    
-                    Spacer()
-                }
-                
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    Text(card.char)
-                        .font(.system(size: 20))
-                        .bold()
-                }
-            }
-            .padding(10)
+            
+            Image("uno.card.number.\(card.char)")
+                .resizable()
+                .interpolation(.none)
+                .aspectRatio(1190/1729, contentMode: .fit)
+                .colorMultiply(glowing == false ? .white.darker(by: 0.5) : .white)
         }
+        .shadow(color: Color(hex: card.color.getHex()).opacity(glowing == true ? 1 : 0), radius: 10)
 
     }
 }
 
 #Preview {
-    UnoCardView(card: UnoCard.genRandom(), glowing: false)
+    UnoCardView(card: UnoCard.genRandom(), glowing: nil)
 }

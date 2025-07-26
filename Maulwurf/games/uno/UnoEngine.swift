@@ -10,6 +10,8 @@ import Foundation
 class UnoEngine: ObservableObject {
     var server: LocalUnoServer = LocalUnoServer.getInstance()
     var updater = Updater.getInstance()
+    var cardActions: UnoCardActionHandler? = nil
+    var twoPlacerCardActions: UnoCardTwoPlayerActionHandler? = nil
     
     @Published var direction: UnoDirection = .Clockwise
     @Published var currentPlayerIndex: Int = 0
@@ -22,6 +24,9 @@ class UnoEngine: ObservableObject {
     private static var INSTANCE: UnoEngine?
     
     private init() {
+        cardActions = UnoCardActionHandler(engine: self)
+        twoPlacerCardActions = UnoCardTwoPlayerActionHandler(engine: self)
+        
         startServer()
     }
     
@@ -60,10 +65,24 @@ class UnoEngine: ObservableObject {
         if canPlaceCard(card) {
             cardHistory.append(card)
             players[currentPlayerIndex].cards.remove(at: cardIndex)
+            checkAndRunCardAction(card)
             waitingForPlayer = false
             server.setTopCard(card)
         } else {
             print("ERROR: TRIED PLACING CARD THAT CAN'T BE PLACED")
+        }
+    }
+    
+    func checkAndRunCardAction(_ card: UnoCard) {
+        if card.isSpecialCard() {
+            print("IS SPECIAL")
+            let specialCard = card as! SpecialUnoCard
+            
+            if remainingPlayers().count != 2 {
+                specialCard.onPlace(actions: cardActions!)
+            } else {
+                specialCard.onPlaceTwoPlayers(actions: twoPlacerCardActions!)
+            }
         }
     }
     
@@ -74,27 +93,23 @@ class UnoEngine: ObservableObject {
     func canPlaceCard(_ card: UnoCard) -> Bool {
         let topCard = getTopCard()
         
-        return UnoEngine.canPlaceCardOn(card, topCard: topCard)
-    }
-    
-    static func canPlaceCardOn(_ card: UnoCard, topCard: UnoCard) -> Bool {
-        if card.color == .WILD { return true }
-        if topCard.color == card.color { return true }
-        if topCard.char == card.char { return true }
-        
-        return false
+        return card.canBePlacedOn(topCard)
     }
     
     func getTopCard() -> UnoCard {
         return cardHistory.last!
     }
     
-    private func getNextPlayer() -> UnoPlayer {
-        nextPlayer()
+    public func getCurrentPlayer() -> UnoPlayer {
         return players[currentPlayerIndex]
     }
     
-    private func nextPlayer() {
+    public func getNextPlayer() -> UnoPlayer {
+        nextPlayer()
+        return players[currentPlayerIndex]
+    }
+
+    public func nextPlayer() {
         let remainingPlayerCount = remainingPlayers().count
         
         if direction == .Clockwise {
