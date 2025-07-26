@@ -30,7 +30,7 @@ struct UnoCardSelector: View {
         self.cards = cards
         
         
-        print(cards.map { "[\($0.char) : \($0.color)]" })
+        print(cards.count)
     }
 
     var body: some View {
@@ -43,7 +43,7 @@ struct UnoCardSelector: View {
                 UnoCardView(card: card, glowing: card.canBePlacedOn(currentCard!))
                     .rotationEffect(.degrees(getRotation(i)), anchor: .bottom)
                     .scaledToFit()
-                    .scaleEffect((selectedCardIndex ?? -1 != i) ? 0.5 : (holdingCardPos == nil ? 0.75 : 0.375))
+                    .scaleEffect((selectedCardIndex ?? -1 != i) ? 0.75 : (holdingCardPos == nil ? 1 : 0.5))
                     .offset(
                         x: offset.width,
                         y: offset.height
@@ -74,17 +74,23 @@ struct UnoCardSelector: View {
     }
     
     private func getCardOffset(_ i: Int) -> CGSize {
-        let defaultOffset = selectedCardIndex == nil ?
-            CGSize(
-                width: (Double(i) - (Double(cards.count - 1) / 2.0))
-                    * (getPixelsPerCard() * 0.5),
-                height: dstToSelected(i) * -20 - (screen.height * 0.05)
-            ) :
-            CGSize(
-                width: (Double(i) - (Double(cards.count - 1) / 2.0))
-                      * (getPixelsPerCard() * 1),
-                height: dstToSelected(i) * -20 - (screen.height * 0.05)
-            )
+//        let defaultOffset = selectedCardIndex == nil ?
+//            CGSize(
+//                width: (Double(i) - (Double(cards.count - 1) / 2.0))
+//                    * (getPixelsPerCard() * 0.5),
+//                height: dstToSelected(i) * -20 - (screen.height * 0.05)
+//            ) :
+//            CGSize(
+//                width: (Double(i) - (Double(cards.count - 1) / 2.0))
+//                      * (getPixelsPerCard() * 1),
+//                height: dstToSelected(i) * -20 - (screen.height * 0.05)
+//            )
+        
+        let defaultOffset = CGSize(
+            width: (Double(i) - (Double(cards.count - 1) / 2.0))
+                * (getPixelsPerCard() * 0.5),
+            height: dstToSelected(i) * -20 - (screen.height * 0.05)
+        )
         
         if selectedCardIndex == i && holdingCardPos != nil {
             let res = CGSize(width: holdingCardPos!.width - startHoldingCardPos!.width, height: holdingCardPos!.height - 100)
@@ -101,7 +107,9 @@ struct UnoCardSelector: View {
     }
 
     private func getRotation(_ i: Int) -> Double {
-        if selectedCardIndex != nil { return 0 }
+        if selectedCardIndex != nil {
+            return ((Double(i - (selectedCardIndex ?? 0)) + 0.5) / Double(cards.count)) * 100
+        }
         return ((Double(i) + 0.5) / Double(cards.count) - 0.5) * 100
     }
 
