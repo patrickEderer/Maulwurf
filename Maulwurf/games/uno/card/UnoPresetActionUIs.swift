@@ -57,6 +57,35 @@ public class UnoPresetActionUIs {
         )
         .padding(20)
     }
+    
+    func getDrawCardUI(cardChar: String, onPlace: @escaping (Int) -> Void, onDraw: @escaping () -> Void, currentCountFunc: () -> String) -> any View {
+        ZStack {
+            let engine = UnoEngine.getInstance()
+            let _ = engine.showCardSelectorHighlighted = true
+            
+            VStack {
+                Spacer()
+                
+                Button {
+                    engine.showCardSelectorHighlighted = false
+                    onDraw()
+                } label: {
+                    Text("Draw \(currentCountFunc()) Cards")
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(Color(hex:"#00FFFF").darker(by: 0.7))
+                        .padding(10)
+                        .frame(width: 160, height: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color(hex:"#00FFFF"))
+                                .stroke(Color(hex:"#00FFFF").opacity(0.5), lineWidth: 5)
+                        )
+                }
+            }
+        }
+    }
 }
 
 struct Segment: Shape {
