@@ -12,9 +12,15 @@ class SimpleHTTPServer {
     private var listener: NWListener?
     private let port: NWEndpoint.Port = 8080
     private let htmlContent: () -> String
+    public var state: UnoServerState = .Stopped
 
     init(contentProvider: @escaping () -> String) {
         self.htmlContent = contentProvider
+    }
+    
+    func stop() {
+        listener?.cancel()
+        state = .Stopped
     }
 
     func start() {
@@ -27,10 +33,20 @@ class SimpleHTTPServer {
 
         listener?.newConnectionHandler = { [weak self] connection in
             connection.start(queue: .main)
+            connection.stateUpdateHandler = { [weak self] state in
+                if state == .ready {
+                    self?.state = .Running
+                } else if state == .cancelled {
+                    self?.state = .Stopped
+                } else {
+                    self?.state = .Error
+                }
+            }
             self?.handle(connection: connection)
         }
 
         listener?.start(queue: .main)
+        state = .Running
         print("✅ Server running on port \(port)")
     }
 

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public class WerwolfPlayer {
+public class WerwolfPlayer: PlayerWithIcon {
     private var name: String
     var role: WerwolfRole
     var index: Int
@@ -18,6 +18,10 @@ public class WerwolfPlayer {
     
     // Skin color, hair, hair color, eyes, mouth
     var imageAssets: (Color, Int, Color, Int, Int)
+    
+    func getImageAssets() -> (Color, Int, Color, Int, Int) {
+        return imageAssets
+    }
     
     init(name: String, role: WerwolfRole, index: Int) {
         self.name = name

@@ -10,4 +10,5 @@ import Foundation
 public enum SaveQueueKey {
     case Werwolf_Players
     case Werwolf_Roles
+    case UNO_Players
 }

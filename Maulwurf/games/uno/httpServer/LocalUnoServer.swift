@@ -13,7 +13,7 @@ import CoreImage.CIFilterBuiltins
 public class LocalUnoServer {
     private static var INSTANCE: LocalUnoServer?
     
-    private var card: UnoCard? = UnoCard(color: .WILD, char: "")
+    private var card: any UnoCard = UnoNumberCard(colorIndex: 0, number: -10)
     
     var httpServer: SimpleHTTPServer?
 
@@ -25,8 +25,8 @@ public class LocalUnoServer {
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                     <meta http-equiv='refresh' content='1'>
                 </head>
-                <body style='font-size:100px;text-align:center;margin-top:30%;background-color:\(self.card!.color.getHex())'>
-                    \(self.card!.char)
+                <body style='font-size:100px;text-align:center;margin-top:30%;background-color:\(UnoColorManager.getInstance().getHexCode(colorIndex: self.card.getColorIndex()))'>
+                    \(self.card.getChar())
                 </body>
             </html>
             """
@@ -40,11 +40,15 @@ public class LocalUnoServer {
         return INSTANCE!
     }
     
-    func setTopCard(_ card: UnoCard) {
+    func setTopCard(_ card: any UnoCard) {
         self.card = card
     }
+    
+    func stop() {
+        httpServer!.stop()
+    }
 
-    func start(_ card: UnoCard) {
+    func start(_ card: any UnoCard) {
         setTopCard(card)
         httpServer!.start()
     }
